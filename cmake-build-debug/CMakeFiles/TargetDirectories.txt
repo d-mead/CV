@@ -1,0 +1,3 @@
+/Users/JackMead/Desktop/CV/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/JackMead/Desktop/CV/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/JackMead/Desktop/CV/cmake-build-debug/CMakeFiles/CV.dir
