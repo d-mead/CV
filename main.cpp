@@ -22,14 +22,27 @@ void draw_line(int a1, int b1, int a2, int b2){
     int e = dy-dx;
 
 
-    for (int i = a1; i < (a2-1); i++) {
-        ::array[i][j] = 1;
-        if (e >= 0){
-            j += 1;
-            e -= dx;
+    if (dx > dy){
+        for (int i = a1; i < (a2-1); i++) {
+            ::array[i][j] = 1;
+            if (e >= 0){
+                j += 1;
+                e -= dx;
+            }
+            e += dy;
         }
-        e += dy;
     }
+    else {
+        for (int i = b1; i < (b2-1); i++) {
+            ::array[j][i] = 1;
+            if (e >= 0){
+                i += 1;
+                e -= dy;
+            }
+            e += dx;
+        }
+    }
+
 }
 
 
@@ -62,8 +75,8 @@ int main() {
     cout << :: array[x1][y1] << endl;
 
     draw_line(x1, y1, x2, y2);
-    draw_line(x3, y3, x2, y2);
-//    draw_line(x1, y1, x3, y3);
+    draw_line(x1, y1, x3, y3);
+    draw_line(x2, y2, x3, y3);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
@@ -87,14 +100,14 @@ int main() {
                     b = 0;
                 }
                 if ((x==x2)&&(y==y2)){
-                    r = 255;
-                    g = 0;
+                    r = 0;
+                    g = 255;
                     b = 0;
                 }
                 if ((x==x3)&&(y==y3)){
-                    r = 255;
+                    r = 0;
                     g = 0;
-                    b = 0;
+                    b = 255;
                 }
             }
 
