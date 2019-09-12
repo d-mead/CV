@@ -14,35 +14,35 @@ int randNumber(){
     return num;
 }
 
-void draw_line(int a1, int b1, int a2, int b2){
-    int dx = a2-a1;
-    int dy = b2-b1;
-    int m = dy/dx;
-    int j = b1;
-    int e = dy-dx;
-
+void draw_line(int x1, int y1, int x2, int y2){
+    int dx = (x2-x1);
+    int dy = (y2-y1);
 
     if (dx > dy){
-        for (int i = a1; i < (a2-1); i++) {
-            ::array[i][j] = 1;
-            if (e >= 0){
-                j += 1;
-                e -= dx;
-            }
-            e += dy;
-        }
-    }
-    else {
-        for (int i = b1; i < (b2-1); i++) {
-            ::array[j][i] = 1;
-            if (e >= 0){
-                i += 1;
-                e -= dy;
-            }
-            e += dx;
-        }
-    }
+        int j = y1;
+        int e = dy-dx;
 
+        for (int i = x1; i <= x2-1; i++){
+            ::array[i][j]=1;
+            if (e>=0){
+                j+=1;
+                e-=dx;
+            }
+            e+=dy;
+        }
+    } else {
+        int i = x1;
+        int e = dx-dy;
+
+        for (int j = y1; j <= y2-1; j++){
+            ::array[i][j]=1;
+            if (e>=0){
+                i+=1;
+                e-=dy;
+            }
+            e+=dx;
+        }
+    }
 }
 
 
@@ -72,7 +72,7 @@ int main() {
     :: array[x2][y2] = 1;
     :: array[x3][y3] = 1;
 
-    cout << :: array[x1][y1] << endl;
+//    cout << :: array[x1][y1] << endl;
 
     draw_line(x1, y1, x2, y2);
     draw_line(x1, y1, x3, y3);
@@ -90,18 +90,18 @@ int main() {
             int b = 255;
 
             if(::array[x][y] == 1){
-                cout << "dark";
+//                cout << "dark";
                 r = 0;
                 g = 0;
                 b = 0;
                 if ((x==x1)&&(y==y1)){
-                    r = 255;
+                    r = 253;
                     g = 0;
                     b = 0;
                 }
                 if ((x==x2)&&(y==y2)){
                     r = 0;
-                    g = 255;
+                    g = 254;
                     b = 0;
                 }
                 if ((x==x3)&&(y==y3)){
