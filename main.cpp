@@ -79,6 +79,33 @@ void draw_line(int x1, int y1, int x2, int y2){
     }
 }
 
+void draw_circle(int x, int y, int r){
+    int xmax = x + (int)(r * 0.70710678);
+
+    y = r;
+    int y2 = y*y;
+    int ty = (2*y)-1;
+    int y2_new = y2;
+
+    for (x = 0; x <= xmax; x++){
+        if ((y2 - y2_new) >= ty) {
+            y2 -= ty;
+            y -= 1;
+            ty -= 2;
+        }
+        ::array[x][y]=1;
+        ::array[x][-1*y]=1;
+        ::array[-1*x][y]=1;
+        ::array[-1*x][-1*y]=1;
+
+        ::array[y][x]=1;
+        ::array[y][-1*x]=1;
+        ::array[-1*y][x]=1;
+        ::array[-1*y][-1*x]=1;
+
+        y2_new -= (2*x)-3;
+    }
+}
 
 
 int main() {
@@ -111,6 +138,8 @@ int main() {
     draw_line(x1, y1, x3, y3);
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
+
+    draw_circle(500, 500, 10);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
