@@ -18,26 +18,58 @@ void draw_line(int x1, int y1, int x2, int y2){
     int dx = (x2-x1);
     int dy = (y2-y1);
 
-    if (dx > dy){
-        int j = y1;
+    if (abs(dx) > abs(dy)){
+        int dj = 1;
+        if (x2 < x1) {
+            int a1 = x1;
+            x1 = x2;
+            x2 = a1;
+            int b1 = y1;
+            y1 = y2;
+            y2 = b1;
+            dj = 1;
+            dx = -dx;
+            dy = -dy;
+        }
+        if (dy < 0){
+            dj = -1;
+            dy = -dy;
+        }
         int e = dy-dx;
+        int j = y1;
 
         for (int i = x1; i <= x2-1; i++){
             ::array[i][j]=1;
             if (e>=0){
-                j+=1;
+                j+=dj;
                 e-=dx;
             }
             e+=dy;
         }
     } else {
-        int i = x1;
+        int di = 1;
+        if (y2 < y1) {
+            int a1 = x1;
+            x1 = x2;
+            x2 = a1;
+            int b1 = y1;
+            y1 = y2;
+            y2 = b1;
+            di = 1;
+            dy = -dy;
+            dx = -dx;
+        }
+        if (dx < 0){
+            di = -1;
+            dx = -dx;
+        }
         int e = dx-dy;
+        int i = x1;
 
         for (int j = y1; j <= y2-1; j++){
             ::array[i][j]=1;
             if (e>=0){
-                i+=1;
+                i+=di;
                 e-=dy;
             }
             e+=dx;
@@ -58,14 +90,14 @@ int main() {
     //
 
     // make the random points
-    int x1 = randNumber();
-    int y1 = randNumber();
+    int x1 = randNumber();//114;//
+    int y1 = randNumber();//305;//
 
-    int x2 = randNumber();
-    int y2 = randNumber();
+    int x2 = randNumber();//599;//
+    int y2 = randNumber();//659;//
 
-    int x3 = randNumber();
-    int y3 = randNumber();
+    int x3 = randNumber();//331;//
+    int y3 = randNumber();//67;//
     //
 
     :: array[x1][y1] = 1;
@@ -74,8 +106,8 @@ int main() {
 
 //    cout << :: array[x1][y1] << endl;
 
-    draw_line(x1, y1, x2, y2);
     draw_line(x1, y1, x3, y3);
+    draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
 
     cout << x1 << " " << y1 << endl;
