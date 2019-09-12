@@ -19,43 +19,45 @@ void draw_line(int x1, int y1, int x2, int y2){
     int dy = (y2-y1);
 
     if (abs(dx) > abs(dy)){
-        int dj = 1;
-        if (x2 < x1) {
+        int dj = 1;  // assume the y pixel will be increasing as the x pixel increases
+        if (dx < 0) { // if the change in x is negative (going backwards)
+            // swap the points
             int a1 = x1;
             x1 = x2;
             x2 = a1;
             int b1 = y1;
             y1 = y2;
             y2 = b1;
-            dj = 1;
+            // recalculate dx and dy with new points
             dx = -dx;
             dy = -dy;
         }
-        if (dy < 0){
-            dj = -1;
-            dy = -dy;
+        if (dy < 0){ // if the change in y is negative (going down instead of up)
+            dj = -1; // make the y pixel decrease as the x pixel increases
+            dy = -dy; // adjust the dy to account for this
         }
-        int e = dy-dx;
-        int j = y1;
+        int e = dy-dx; // set the e
+        int j = y1; // first y pixel
 
-        for (int i = x1; i <= x2-1; i++){
-            ::array[i][j]=1;
-            if (e>=0){
-                j+=dj;
-                e-=dx;
+        for (int i = x1; i <= x2-1; i++){ // from starting to final x pixels
+            ::array[i][j]=1; // add the i, j to the pixels that need to be 'lit'
+            if (e>=0){ // if e is less than 0
+                j+=dj; // y pixel needs to be changed
+                e-=dx; // decrease e
             }
-            e+=dy;
+            e+=dy; //increase e because you moved
         }
     } else {
         int di = 1;
-        if (y2 < y1) {
+        if (dy < 0) {
+
             int a1 = x1;
             x1 = x2;
             x2 = a1;
             int b1 = y1;
             y1 = y2;
             y2 = b1;
-            di = 1;
+
             dy = -dy;
             dx = -dx;
         }
