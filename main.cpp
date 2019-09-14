@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
+#include <cmath>
 #include <list>
 
 using namespace std;
@@ -12,6 +12,13 @@ int array[800][800] = {0};
 int randNumber(){
     int num = rand() % 799 + 1;
     return num;
+}
+
+void set_pixel(int x, int y){
+    if ((x < 800)&&(y < 800)){
+        ::array[x][y] = 1;
+    }
+
 }
 
 void draw_line(int x1, int y1, int x2, int y2){
@@ -40,7 +47,7 @@ void draw_line(int x1, int y1, int x2, int y2){
         int j = y1; // first y pixel
 
         for (int i = x1; i <= x2-1; i++){ // from starting to final x pixels
-            ::array[i][j]=1; // add the i, j to the pixels that need to be 'lit'
+            set_pixel(i, j); // add the i, j to the pixels that need to be 'lit'
             if (e>=0){ // if e is less than 0
                 j+=dj; // y pixel needs to be changed
                 e-=dx; // decrease e
@@ -69,7 +76,7 @@ void draw_line(int x1, int y1, int x2, int y2){
         int i = x1;
 
         for (int j = y1; j <= y2-1; j++){
-            ::array[i][j]=1;
+            set_pixel(i, j);
             if (e>=0){
                 i+=di;
                 e-=dy;
@@ -79,33 +86,36 @@ void draw_line(int x1, int y1, int x2, int y2){
     }
 }
 
-void draw_circle(int x, int y, int r){
-    int xmax = x + (int)(r * 0.70710678);
+void draw_circle(int i, int j, int r){
+    int x, y, xmax, y2, y2_new, ty;
+
+    xmax = (int)(r/sqrt(2));
 
     y = r;
-    int y2 = y*y;
-    int ty = (2*y)-1;
-    int y2_new = y2;
+    y2 = y*y;
+    ty = (2*y)-1;
+    y2_new = y2;
 
-    for (x = 0; x <= xmax; x++){
-        if ((y2 - y2_new) >= ty) {
+    for (x = 0; x <= xmax + 2; x++){
+        if ((y2-y2_new) >= ty){
             y2 -= ty;
             y -= 1;
-            ty -= 2;
+            ty -=2;
         }
-        ::array[x][y]=1;
-        ::array[x][-1*y]=1;
-        ::array[-1*x][y]=1;
-        ::array[-1*x][-1*y]=1;
 
-        ::array[y][x]=1;
-        ::array[y][-1*x]=1;
-        ::array[-1*y][x]=1;
-        ::array[-1*y][-1*x]=1;
+        set_pixel (x + i, y + i);
+        set_pixel (x + i, -y + i);
+        set_pixel (-x + i, y + i);
+        set_pixel (-x + i, -y + i);
+        set_pixel (y + i, x + i);
+        set_pixel (y + i, -x + i);
+        set_pixel (-y + i, x + i);
+        set_pixel (-y + i, -x + i);
 
         y2_new -= (2*x)-3;
     }
 }
+
 
 
 int main() {
@@ -139,7 +149,18 @@ int main() {
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
 
-    draw_circle(500, 500, 10);
+    int a, b, c;
+
+    a = (int)sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
+    b = (int)sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
+    c = (int)sqrt(pow((x2-x3), 2) + pow(y2-y3, 2));
+
+    int s = (int)(0.5)*(a + b + c);
+
+    int small_r = (int)(sqrt(((s-a) + (s-b) + (s-c))/s));
+    int big_r = (int)(a*b*c)/(4*small_r*s);
+
+    draw_circle(500, 500, 100);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
@@ -153,7 +174,7 @@ int main() {
             int b = 255;
 
             if(::array[x][y] == 1){
-//                cout << "dark";
+                cout << "dark";
                 r = 0;
                 g = 0;
                 b = 0;
