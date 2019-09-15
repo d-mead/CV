@@ -15,7 +15,7 @@ int randNumber(){
 }
 
 void set_pixel(int x, int y){
-    if ((x < 800)&&(y < 800)){
+    if ((x < 800)&&(y < 800)&&(x > -1)&&(y > -1)){
         ::array[x][y] = 1;
     }
 
@@ -86,6 +86,8 @@ void draw_line(int x1, int y1, int x2, int y2){
     }
 }
 
+
+
 void draw_circle(int i, int j, int r){
     int x, y, xmax, y2, y2_new, ty;
 
@@ -116,7 +118,19 @@ void draw_circle(int i, int j, int r){
     }
 }
 
+void three_point_circle(int x1, int y1, int x2, int y2, int x3, int y3){
+    double ma, mb;
+    double x, y, r;
+    ma = (y2 - y1)/(x2 - x1);
+    mb = (y3 - y2)/(x3 - x2);
 
+    x = ((x1*x1 + y1*y1)*(y2 - y3) + (x2*x2 + y2*y2)*(y3 - y1) + (x3*x3 + y3*y3)*(y1 - y2))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+    y = ((x1*x1 + y1*y1)*(x3 - x2) + (x2*x2 + y2*y2)*(x1 - x3) + (x3*x3 + y3*y3)*(x2 - x1))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+
+    r = sqrt(pow((x1-x), 2) + pow((y1-y), 2));
+
+    draw_circle((int)x, (int)y, (int)r);
+}
 
 int main() {
     srand(time(NULL));
@@ -149,23 +163,20 @@ int main() {
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
 
-    int mid_x, mid_y;
+    three_point_circle(x1, y1, x2, y2, x3, y3);
 
-    mid_x = (x1 + x2 + x3)/3;
-    mid_y = (y1 + y2 + y3)/3;
+    int mid12x, mid12y, mid13x, mid13y, mid23x, mid23y;
 
-    double a, b, c, s;
+    mid12x = (x1 + x2)/2;
+    mid12y = (y1 + y2)/2;
+    mid13x = (x1 + x3)/2;
+    mid13y = (y1 + y3)/2;
+    mid23x = (x2 + x3)/2;
+    mid23y = (y2 + y3)/2;
 
-    a = sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
-    b = sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
-    c = sqrt(pow((x2-x3), 2) + pow(y2-y3, 2));
+    three_point_circle(mid12x, mid12y, mid13x, mid13y, mid23x, mid23y);
 
-    s = (a + b + c)/2;
-
-    int small_r = (int)(sqrt(((s-a) * (s-b) * (s-c))/s));
-    int big_r = (int)(a*b*c)/(4*small_r*s);
-
-    draw_circle(mid_x, mid_y, big_r);
+//    draw_circle(mid_x, mid_y, big_r);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
