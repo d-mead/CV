@@ -103,14 +103,14 @@ void draw_circle(int i, int j, int r){
             ty -=2;
         }
 
-        set_pixel (x + i, y + i);
-        set_pixel (x + i, -y + i);
-        set_pixel (-x + i, y + i);
-        set_pixel (-x + i, -y + i);
-        set_pixel (y + i, x + i);
-        set_pixel (y + i, -x + i);
-        set_pixel (-y + i, x + i);
-        set_pixel (-y + i, -x + i);
+        set_pixel (x + i, y + j);
+        set_pixel (x + i, -y + j);
+        set_pixel (-x + i, y + j);
+        set_pixel (-x + i, -y + j);
+        set_pixel (y + i, x + j);
+        set_pixel (y + i, -x + j);
+        set_pixel (-y + i, x + j);
+        set_pixel (-y + i, -x + j);
 
         y2_new -= (2*x)-3;
     }
@@ -149,18 +149,23 @@ int main() {
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
 
-    int a, b, c;
+    int mid_x, mid_y;
 
-    a = (int)sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
-    b = (int)sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
-    c = (int)sqrt(pow((x2-x3), 2) + pow(y2-y3, 2));
+    mid_x = (x1 + x2 + x3)/3;
+    mid_y = (y1 + y2 + y3)/3;
 
-    int s = (int)(0.5)*(a + b + c);
+    double a, b, c, s;
 
-    int small_r = (int)(sqrt(((s-a) + (s-b) + (s-c))/s));
+    a = sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
+    b = sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
+    c = sqrt(pow((x2-x3), 2) + pow(y2-y3, 2));
+
+    s = (a + b + c)/2;
+
+    int small_r = (int)(sqrt(((s-a) * (s-b) * (s-c))/s));
     int big_r = (int)(a*b*c)/(4*small_r*s);
 
-    draw_circle(500, 500, 100);
+    draw_circle(mid_x, mid_y, big_r);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
@@ -174,7 +179,7 @@ int main() {
             int b = 255;
 
             if(::array[x][y] == 1){
-                cout << "dark";
+//                cout << "dark";
                 r = 0;
                 g = 0;
                 b = 0;
