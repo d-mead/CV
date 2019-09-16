@@ -86,6 +86,17 @@ void draw_line(int x1, int y1, int x2, int y2){
     }
 }
 
+void draw_full_line(int x1, int y1, int x2, int y2){
+    double m = (y2-y1)/(x2-x1);
+    int y0, y800;
+
+    y0 = m*(0-x1)+y1;
+    y800 = m*(800-x1)+y1;
+
+    draw_line(0, y0, 800, y800);
+
+}
+
 
 
 void draw_circle(int i, int j, int r){
@@ -98,7 +109,7 @@ void draw_circle(int i, int j, int r){
     ty = (2*y)-1;
     y2_new = y2;
 
-    for (x = 0; x <= xmax + 2; x++){
+    for (x = 0; x <= xmax+2; x++){
         if ((y2-y2_new) >= ty){
             y2 -= ty;
             y -= 1;
@@ -118,7 +129,7 @@ void draw_circle(int i, int j, int r){
     }
 }
 
-void three_point_circle(int x1, int y1, int x2, int y2, int x3, int y3){
+void circumcircle(int x1, int y1, int x2, int y2, int x3, int y3){
     double ma, mb;
     double x, y, r;
     ma = (y2 - y1)/(x2 - x1);
@@ -130,6 +141,51 @@ void three_point_circle(int x1, int y1, int x2, int y2, int x3, int y3){
     r = sqrt(pow((x1-x), 2) + pow((y1-y), 2));
 
     draw_circle((int)x, (int)y, (int)r);
+}
+
+void incircle(int x1, int y1, int x2, int y2, int x3, int y3){
+    double a, b, c;
+    a = sqrt(pow((x3-x2), 2) + pow(y3-y2, 2));
+    b = sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
+    c = sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
+
+    int x, y, r;
+
+    x = (int)(a*x1 + b*x2 + c*x3)/(a + b + c);
+    y = (int)(a*y1 + b*y2 + c*y3)/(a + b + c);
+
+    double s = (a + b + c)/2;
+    r = (int)(sqrt(((s-a) * (s-b) * (s-c))/s));
+
+    draw_circle(x, y, r);
+
+}
+
+void eulerline(int x1, int y1, int x2, int y2, int x3, int y3){
+
+    double z1, z2;
+
+    z1 = (y2 + y3 -2*y1)/(x2 + x3 - 2*x1);
+    z2 = (y1 + y3 -2*y2)/(x1 + x3 - 2*x2);
+
+    int xa, ya;
+
+    xa = (x1 + x2 + x3)/3;
+    ya = (y1 + y2 + y3)/3;
+
+//    xa = (z2*x2 - z1*x1 + y1 + y2)/(z2 - z1);
+//    ya = z1*(xa-x1)+y1;
+
+    double ma, mb;
+    double xb, yb;
+    ma = (y2 - y1)/(x2 - x1);
+    mb = (y3 - y2)/(x3 - x2);
+
+    xb = ((x1*x1 + y1*y1)*(y2 - y3) + (x2*x2 + y2*y2)*(y3 - y1) + (x3*x3 + y3*y3)*(y1 - y2))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+    yb = ((x1*x1 + y1*y1)*(x3 - x2) + (x2*x2 + y2*y2)*(x1 - x3) + (x3*x3 + y3*y3)*(x2 - x1))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+
+    draw_full_line(xa, ya, xb, yb);
+
 }
 
 int main() {
@@ -163,18 +219,13 @@ int main() {
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
 
-    three_point_circle(x1, y1, x2, y2, x3, y3);
+    circumcircle(x1, y1, x2, y2, x3, y3);
 
-    int mid12x, mid12y, mid13x, mid13y, mid23x, mid23y;
+//    int mid12x, mid12y, mid13x, mid13y, mid23x, mid23y;
 
-    mid12x = (x1 + x2)/2;
-    mid12y = (y1 + y2)/2;
-    mid13x = (x1 + x3)/2;
-    mid13y = (y1 + y3)/2;
-    mid23x = (x2 + x3)/2;
-    mid23y = (y2 + y3)/2;
+    incircle(x1, y1, x2, y2, x3, y3);
 
-    three_point_circle(mid12x, mid12y, mid13x, mid13y, mid23x, mid23y);
+    eulerline(x1, y1, x2, y2, x3, y3);
 
 //    draw_circle(mid_x, mid_y, big_r);
 
