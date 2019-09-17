@@ -161,6 +161,40 @@ void incircle(int x1, int y1, int x2, int y2, int x3, int y3){
 
 }
 
+void ninecircle(double x1, double y1, double x2, double y2, double x3, double y3){
+
+    double xa, ya, xb, yb, xc, yc, xd, yd, xe, ye, r;
+
+    //centroid
+    xa = (x1 + x2 + x3)/3;
+    ya = (y1 + y2 + y3)/3;
+
+    //circumcenter
+    xb = ((x1*x1 + y1*y1)*(y2 - y3) + (x2*x2 + y2*y2)*(y3 - y1) + (x3*x3 + y3*y3)*(y1 - y2))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+    yb = ((x1*x1 + y1*y1)*(x3 - x2) + (x2*x2 + y2*y2)*(x1 - x3) + (x3*x3 + y3*y3)*(x2 - x1))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
+
+    //orthocenter
+    xc = xa - (xb-xa)*2;
+    yc = ya - (yb-ya)*2;
+
+    //nine point center
+    xd = (xc + xb)/2;
+    yd = (yc + yb)/2;
+
+    //mid
+    xe = (x1 + x2)/2;
+    ye = (y1 + y2)/2;
+
+    r = sqrt(pow((xd-xe), 2) + pow(yd-ye, 2));
+
+//    draw_line(xc, yc, x1, y1);
+//    draw_line(xc, yc, x2, y2);
+//    draw_line(xc, yc, x3, y3);
+
+    draw_circle(xd, yd, r);
+
+}
+
 void eulerline(int x1, int y1, int x2, int y2, int x3, int y3){
 
     double z1, z2;
@@ -225,9 +259,11 @@ int main() {
 
     incircle(x1, y1, x2, y2, x3, y3);
 
-    eulerline(x1, y1, x2, y2, x3, y3);
+//    eulerline(x1, y1, x2, y2, x3, y3);
 
 //    draw_circle(mid_x, mid_y, big_r);
+
+    ninecircle(x1, y1, x2, y2, x3, y3);
 
     cout << x1 << " " << y1 << endl;
     cout << x2 << " " << y2 << endl;
