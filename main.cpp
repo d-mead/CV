@@ -9,30 +9,32 @@ const int width = 800, height = 800;
 
 int array[800][800] = {0};
 
-int randNumber(){
-    int num = rand() % 799 + 1;
+double randNumber(){
+    double num = ((double) rand() / (RAND_MAX));//rand() % 1 + 1;
     return num;
 }
 
-void set_pixel(int x, int y){
+void set_pixel(double x, double y){
+    x = x*800;
+    y = y*800;
     if ((x < 800)&&(y < 800)&&(x > -1)&&(y > -1)){
-        ::array[x][y] = 1;
+        ::array[(int)x][(int)y] = 1;
     }
 
 }
 
-void draw_line(int x1, int y1, int x2, int y2){
-    int dx = (x2-x1);
-    int dy = (y2-y1);
+void draw_line(double x1, double y1, double x2, double y2){
+    double dx = (x2-x1);
+    double dy = (y2-y1);
 
     if (abs(dx) > abs(dy)){
-        int dj = 1;  // assume the y pixel will be increasing as the x pixel increases
+        double dj = 1.0/800;  // assume the y pixel will be increasing as the x pixel increases
         if (dx < 0) { // if the change in x is negative (going backwards)
             // swap the points
-            int a1 = x1;
+            double a1 = x1;
             x1 = x2;
             x2 = a1;
-            int b1 = y1;
+            double b1 = y1;
             y1 = y2;
             y2 = b1;
             // recalculate dx and dy with new points
@@ -40,13 +42,13 @@ void draw_line(int x1, int y1, int x2, int y2){
             dy = -dy;
         }
         if (dy < 0){ // if the change in y is negative (going down instead of up)
-            dj = -1; // make the y pixel decrease as the x pixel increases
+            dj = -1.0/800; // make the y pixel decrease as the x pixel increases
             dy = -dy; // adjust the dy to account for this
         }
-        int e = dy-dx; // set the e
-        int j = y1; // first y pixel
+        double e = dy-dx; // set the e
+        double j = y1; // first y pixel
 
-        for (int i = x1; i <= x2-1; i++){ // from starting to final x pixels
+        for (double i = x1; i <= x2-1.0/800; i+= 1.0/800){ // from starting to final x pixels
             set_pixel(i, j); // add the i, j to the pixels that need to be 'lit'
             if (e>=0){ // if e is less than 0
                 j+=dj; // y pixel needs to be changed
@@ -55,13 +57,13 @@ void draw_line(int x1, int y1, int x2, int y2){
             e+=dy; //increase e because you moved
         }
     } else {
-        int di = 1;
+        double di = 1.0/800;
         if (dy < 0) {
 
-            int a1 = x1;
+            double a1 = x1;
             x1 = x2;
             x2 = a1;
-            int b1 = y1;
+            double b1 = y1;
             y1 = y2;
             y2 = b1;
 
@@ -69,13 +71,13 @@ void draw_line(int x1, int y1, int x2, int y2){
             dx = -dx;
         }
         if (dx < 0){
-            di = -1;
+            di = -1.0/800;
             dx = -dx;
         }
-        int e = dx-dy;
-        int i = x1;
+        double e = dx-dy;
+        double i = x1;
 
-        for (int j = y1; j <= y2-1; j++){
+        for (double j = y1; j <= y2-1.0/800; j+= 1.0/800){
             set_pixel(i, j);
             if (e>=0){
                 i+=di;
@@ -86,34 +88,34 @@ void draw_line(int x1, int y1, int x2, int y2){
     }
 }
 
-void draw_full_line(int x1, int y1, int x2, int y2){
+void draw_full_line(double x1, double y1, double x2, double y2){
     double m = (y2-y1)/(x2-x1);
-    int y0, y800;
+    double y0, y800;
 
-    y0 = m*(0-x1)+y1;
-    y800 = m*(800-x1)+y1;
+    y0 = m*(0.0-x1)+y1;
+    y800 = m*(1.0-x1)+y1;
 
-    draw_line(0, y0, 800, y800);
+    draw_line(0.0, y0, 1.0, y800);
 
 }
 
 
 
-void draw_circle(int i, int j, int r){
-    int x, y, xmax, y2, y2_new, ty;
+void draw_circle(double i, double j, double r){
+    double x, y, xmax, y2, y2_new, ty;
 
-    xmax = (int)(r/sqrt(2));
+    xmax = (double)(r/sqrt(2));
 
     y = r;
     y2 = y*y;
-    ty = (2*y)-1;
+    ty = (2*y)-1.0/800;
     y2_new = y2;
 
-    for (x = 0; x <= xmax+2; x++){
+    for (x = 0; x <= xmax+2.0/800; x+= 1.0/800){
         if ((y2-y2_new) >= ty){
             y2 -= ty;
-            y -= 1;
-            ty -=2;
+            y -= 1.0/800;
+            ty -=2.0/800;
         }
 
         set_pixel (x + i, y + j);
@@ -125,7 +127,7 @@ void draw_circle(int i, int j, int r){
         set_pixel (-y + i, x + j);
         set_pixel (-y + i, -x + j);
 
-        y2_new -= (2*x)-3;
+        y2_new -= (2*x)-3.0/800;
     }
 }
 
@@ -140,7 +142,7 @@ void circumcircle(double x1, double y1, double x2, double y2, double x3, double 
 
     r = sqrt(pow((x1-x), 2) + pow((y1-y), 2));
 
-    draw_circle((int)x, (int)y, (int)r);
+    draw_circle(x, y, r);
 }
 
 void incircle(double x1, double y1, double x2, double y2, double x3, double y3){
@@ -149,13 +151,13 @@ void incircle(double x1, double y1, double x2, double y2, double x3, double y3){
     b = sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
     c = sqrt(pow((x2-x1), 2) + pow(y2-y1, 2));
 
-    int x, y, r;
+    double x, y, r;
 
-    x = (int)(a*x1 + b*x2 + c*x3)/(a + b + c);
-    y = (int)(a*y1 + b*y2 + c*y3)/(a + b + c);
+    x = (a*x1 + b*x2 + c*x3)/(a + b + c);
+    y = (a*y1 + b*y2 + c*y3)/(a + b + c);
 
     double s = (a + b + c)/2;
-    r = (int)(sqrt(((s-a) * (s-b) * (s-c))/s));
+    r = (sqrt(((s-a) * (s-b) * (s-c))/s));
 
     draw_circle(x, y, r);
 
@@ -187,10 +189,6 @@ void ninecircle(double x1, double y1, double x2, double y2, double x3, double y3
 
     r = sqrt(pow((xd-xe), 2) + pow(yd-ye, 2));
 
-//    draw_line(xc, yc, x1, y1);
-//    draw_line(xc, yc, x2, y2);
-//    draw_line(xc, yc, x3, y3);
-
     draw_circle(xd, yd, r);
 
 }
@@ -207,13 +205,7 @@ void eulerline(double x1, double y1, double x2, double y2, double x3, double y3)
     xa = (x1 + x2 + x3)/3;
     ya = (y1 + y2 + y3)/3;
 
-//    xa = (z2*x2 - z1*x1 + y1 + y2)/(z2 - z1);
-//    ya = z1*(xa-x1)+y1;
-
-    double ma, mb;
     double xb, yb;
-    ma = (y2 - y1)/(x2 - x1);
-    mb = (y3 - y2)/(x3 - x2);
 
     xb = ((x1*x1 + y1*y1)*(y2 - y3) + (x2*x2 + y2*y2)*(y3 - y1) + (x3*x3 + y3*y3)*(y1 - y2))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
     yb = ((x1*x1 + y1*y1)*(x3 - x2) + (x2*x2 + y2*y2)*(x1 - x3) + (x3*x3 + y3*y3)*(x2 - x1))/(2*(x1*(y2 - y3) - y1*(x2 - x3) + x2*y3 - x3*y2));
@@ -232,42 +224,41 @@ int main() {
     img << "255" << endl;
     //
 
+    double x1, y1, x2, y2, x3, y3;
     // make the random points
-    int x1 = randNumber();//114;//
-    int y1 = randNumber();//305;//
+    x1 = randNumber();//114;//
+    y1 = randNumber();//305;//
 
-    int x2 = randNumber();//599;//
-    int y2 = randNumber();//659;//
+    x2 = randNumber();//599;//
+    y2 = randNumber();//659;//
 
-    int x3 = randNumber();//331;//
-    int y3 = randNumber();//67;//
+    x3 = randNumber();//331;//
+    y3 = randNumber();//67;//
     //
 
-    :: array[x1][y1] = 1;
-    :: array[x2][y2] = 1;
-    :: array[x3][y3] = 1;
+    //draws endpoints
+    set_pixel(x1, y1);
+    set_pixel(x2, y2);
+    set_pixel(x3, y3);
+    //
 
-//    cout << :: array[x1][y1] << endl;
-
+    //draws lines of the triangle
     draw_line(x1, y1, x3, y3);
     draw_line(x1, y1, x2, y2);
     draw_line(x2, y2, x3, y3);
+    //
 
     circumcircle(x1, y1, x2, y2, x3, y3);
 
-//    int mid12x, mid12y, mid13x, mid13y, mid23x, mid23y;
-
     incircle(x1, y1, x2, y2, x3, y3);
 
-//    eulerline(x1, y1, x2, y2, x3, y3);
-
-//    draw_circle(mid_x, mid_y, big_r);
+    eulerline(x1, y1, x2, y2, x3, y3);
 
     ninecircle(x1, y1, x2, y2, x3, y3);
 
-    cout << x1 << " " << y1 << endl;
-    cout << x2 << " " << y2 << endl;
-    cout << x3 << " " << y3 << endl;
+//    cout << x1 << " " << y1 << endl;
+//    cout << x2 << " " << y2 << endl;
+//    cout << x3 << " " << y3 << endl;
 
     for (int y = 0; y < height; y++){
         for (int x = 0; x < width; x++){
@@ -277,25 +268,25 @@ int main() {
             int b = 255;
 
             if(::array[x][y] == 1){
-//                cout << "dark";
+//                cout << "x";
                 r = 0;
                 g = 0;
                 b = 0;
-                if ((x==x1)&&(y==y1)){
-                    r = 253;
-                    g = 0;
-                    b = 0;
-                }
-                if ((x==x2)&&(y==y2)){
-                    r = 0;
-                    g = 254;
-                    b = 0;
-                }
-                if ((x==x3)&&(y==y3)){
-                    r = 0;
-                    g = 0;
-                    b = 255;
-                }
+//                if ((x==x1)&&(y==y1)){
+//                    r = 253;
+//                    g = 0;
+//                    b = 0;
+//                }
+//                if ((x==x2)&&(y==y2)){
+//                    r = 0;
+//                    g = 254;
+//                    b = 0;
+//                }
+//                if ((x==x3)&&(y==y3)){
+//                    r = 0;
+//                    g = 0;
+//                    b = 255;
+//                }
             }
 
             img << r << " " << g << " " << b << " ";
