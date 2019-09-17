@@ -129,7 +129,7 @@ void draw_circle(int i, int j, int r){
     }
 }
 
-void circumcircle(int x1, int y1, int x2, int y2, int x3, int y3){
+void circumcircle(double x1, double y1, double x2, double y2, double x3, double y3){
     double ma, mb;
     double x, y, r;
     ma = (y2 - y1)/(x2 - x1);
@@ -143,7 +143,7 @@ void circumcircle(int x1, int y1, int x2, int y2, int x3, int y3){
     draw_circle((int)x, (int)y, (int)r);
 }
 
-void incircle(int x1, int y1, int x2, int y2, int x3, int y3){
+void incircle(double x1, double y1, double x2, double y2, double x3, double y3){
     double a, b, c;
     a = sqrt(pow((x3-x2), 2) + pow(y3-y2, 2));
     b = sqrt(pow((x3-x1), 2) + pow(y3-y1, 2));
@@ -195,14 +195,14 @@ void ninecircle(double x1, double y1, double x2, double y2, double x3, double y3
 
 }
 
-void eulerline(int x1, int y1, int x2, int y2, int x3, int y3){
+void eulerline(double x1, double y1, double x2, double y2, double x3, double y3){
 
     double z1, z2;
 
     z1 = (y2 + y3 -2*y1)/(x2 + x3 - 2*x1);
     z2 = (y1 + y3 -2*y2)/(x1 + x3 - 2*x2);
 
-    int xa, ya;
+    double xa, ya;
 
     xa = (x1 + x2 + x3)/3;
     ya = (y1 + y2 + y3)/3;
