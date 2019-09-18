@@ -6,10 +6,8 @@
 
 #IncludeRegexTransform: 
 
-/Users/JackMead/Desktop/CV/main.cpp
+/Users/JackMead/Desktop/CV/project1ext.cpp
 fstream
--
-iostream
 -
 cmath
 -

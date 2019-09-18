@@ -1,7 +1,9 @@
 #include <fstream>
-#include <iostream>
+//#include <iostream>
 #include <cmath>
 #include <list>
+
+//David Mead 9/17/2019 Project 1
 
 using namespace std;
 

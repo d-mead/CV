@@ -3,4 +3,4 @@ project(CV)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CV main.cpp)
+add_executable(CV main.cpp project1ext.cpp)

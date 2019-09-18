@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/CV.dir/main.cpp.o"
+  "CMakeFiles/CV.dir/project1ext.cpp.o"
   "CV.pdb"
   "CV"
 )

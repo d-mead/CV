@@ -83,6 +83,9 @@
 		<Unit filename="/Users/JackMead/Desktop/CV/main.cpp">
 			<Option target="CV"/>
 		</Unit>
+		<Unit filename="/Users/JackMead/Desktop/CV/project1ext.cpp">
+			<Option target="CV"/>
+		</Unit>
 		<Unit filename="/Users/JackMead/Desktop/CV/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
