@@ -3,15 +3,20 @@
 //
 
 #include <fstream>
-//#include <iostream>
+#include <iostream>
 #include <cmath>
 #include <list>
+//#include <tuple>
+#include <stdexcept>
+#include <tr1>
+//using namespace std;
 
 //David Mead 9/17/2019 Project 1
 
 using namespace std;
 
 const int width = 800, height = 800;
+
 
 int array[800][800] = {0};
 
@@ -139,6 +144,45 @@ void midpoint_circles(double x1, double y1, double x2, double y2){
     draw_circle(midx, midy, r);
 }
 
+int closest(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4){
+    double two, three, four;
+    two = distance(x1, y1, x2, y2);
+    three = distance(x1, y1, x3, y3);
+    four = distance(x1, y1, x4, y4);
+
+    if ((two < three)&&(two < four)){
+        return 2;
+    }
+    if ((three < two)&&(two < four)){
+        return 3;
+    } else {
+        return 4;
+    }
+}
+
+std::tr1::tuple<double, double> find_intersect(double m, double x1, double y1, double r, double h, double k){
+    double x, y;
+    y = sqrt(r*r - (x1-h)*(x1-h))+k;
+    x = (y-y1)/m + x1;
+
+    return std::tr1::make_tuple(x, y);
+}
+
+double get_slope(double x1, double y1, double x2, double y2){
+    return (y2-y2)/(x2-x1);
+}
+
+tuple <int, int, int> get_circle(double x1, double y1, double x2, double y2){
+    double h, k, r;
+
+    h = (x2 + x1)/2;
+    k = (y2 + y1)/1;
+
+    r = distance(h, k, x1, y1);
+
+    return std::make_tuple(h, k, r);
+}
+
 
 
 int main() {
@@ -166,8 +210,6 @@ int main() {
     y4 = randNumber();//67;//
     //
 
-
-
     //draws endpoints
     set_pixel(x1, y1);
     set_pixel(x2, y2);
@@ -175,17 +217,37 @@ int main() {
     set_pixel(x4, y4);
     //
 
+
     midpoint_circles(x1, y1, x2, y2);
     draw_line(x1, y1, x2, y2);
 
-    midpoint_circles(x3, y3, x2, y2);
-    draw_line(x3, y3, x2, y2);
+    midpoint_circles(x2, y2, x3, y3);
+    draw_line(x2, y2, x3, y3);
 
     midpoint_circles(x3, y3, x4, y4);
     draw_line(x3, y3, x4, y4);
 
-    midpoint_circles(x1, y1, x4, y4);
-    draw_line(x1, y1, x4, y4);
+    midpoint_circles(x4, y4, x1, y1);
+    draw_line(x4, y4, x1, y1);
+
+    double m12, m23, m34, m41;
+
+    m12 = get_slope(x1, y1, x2, y2);
+    m23 = get_slope(x2, y2, x3, y3);
+    m34 = get_slope(x3, y3, x4, y4);
+    m41 = get_slope(x4, y4, x1, y1);
+
+    double randm = 1.0;
+    double h12, k12, r12, x12, y12;
+
+    tie(h12, k12, r12) = get_circle(x1, y1, x2, y2);
+    tie(x12, y12) = find_intersect(randm, x1, y1, h12, k12, r12);
+
+    draw_line(x1, y1, x12, y12);
+    draw_line(x2, y2, x12, y12);
+
+
+//    pair<int, int> c = find_intersect()
 
 
     for (int y = 0; y < height; y++){
